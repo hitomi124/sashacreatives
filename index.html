@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sasha Creatives | GFX </title>
+<meta name="description" content="[Short description of your GFX services for search engines]">
+<meta name="theme-color" content="#EE6DF7">
+<link rel="icon" type="image/png" href="images/brand/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#home" class="logo" aria-label="Sasha Creatives home">
+      <img src="images/brand/mark.webp" alt="" width="46" height="34">
+      <span>Sasha Creatives</span>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span></button>
+    <nav aria-label="Main">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" data-target="home">Home</a></li>
+        <li><a href="#about" data-target="about">About Us</a></li>
+        <li><a href="#pricing" data-target="pricing">Pricing</a></li>
+        <li><a href="#commission" data-target="commission">Commission</a></li>
+        <li><a href="#contact" data-target="contact">Contact Us</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="home" data-nav="home">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>Unique GFX Designs for Your Brand</h1>
+      <p>We create custom graphics that make your brand stand out in the digital space.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#works">View Portfolio
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#commission">Commission Info</a>
+      </div>
+    </div>
+
+    <div class="stage" aria-hidden="true">
+      <div class="back-card"><img src="images/portfolio/posters/poster-2.webp" alt=""></div>
+      <div class="frame">
+        <div class="poster"><img src="images/portfolio/posters/poster-1.webp" alt=""></div>
+        <div class="sel"><i></i><i></i><i></i><i></i></div>
+        <span class="size-tag">Sasha Jaworski</span>
+        <div class="cursor">
+          <svg viewBox="0 0 24 24"><path d="M4 3l16 7.5-7 2-2.5 7.5z" fill="#E23DF2" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          <b>Sasha</b>
+        </div>
+      </div>
+      <div class="layers"><div><em></em><span></span></div><div><em></em><span></span></div><div><em></em><span></span></div></div>
+      <div class="swatches"><i style="background:#FADFF8"></i><i style="background:#EE6DF7"></i><i style="background:#E23DF2"></i><i style="background:#150E1A"></i></div>
+    </div>
+  </div>
+</section>
+<section class="section" id="works" data-nav="home">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Our Portfolio</h2>
+      <p class="lead">Explore our collection of custom graphics designed to elevate your brand's presence.</p>
+    </div>
+    <nav class="jump" id="jump" aria-label="Portfolio categories"></nav>
+    <div id="cats"></div>
+  </div>
+</section>
+
+<section class="section tint" id="about" data-nav="about">
+  <div class="wrap about-grid">
+    <div>
+      <h2>About Us</h2>
+      <p class="about-intro">We are a creative GFX team dedicated to turning ideas into unique and eye-catching designs. We create high-quality visuals with a modern style, focusing on creativity, detail, and bringing every client’s vision to life.</p>
+      <div class="about-points">
+        <div><h3>Who we are</h3><p>We are a creative GFX team focused on turning ideas into eye-catching digital designs.</p></div>
+        <div><h3>What we create</h3><p>We create logos, banners, posters, gaming graphics, and other custom digital designs.</p></div>
+        <div><h3>Design style</h3><p>Our style combines modern visuals, clean layouts, and creative details to make every design stand out.</p></div>
+        <div><h3>Goals and approach</h3><p>Our goal is to create high-quality designs while understanding each client's vision and bringing it to life.</p></div>
+      </div>
+      <p class="lead" style="margin-top:36px"><strong style="color:var(--ink)">Why work with us?</strong> -We create custom logos, social media graphics, gaming visuals, posters, banners, stream graphics, photo edits, and personalized GFX tailored to your needs.</p>
+    </div>
+    <div class="brand-card">
+      <img src="images/brand/logo.webp" alt="Sasha Creatives logo">
+      <div class="brand-tag"><b>Sasha Jaworski</b><small>Graphic Designer</small></div>
+    </div>
+  </div>
+</section>
+<section class="section" id="pricing" data-nav="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Pricing</h2>
+      <p class="lead">This is where you can find our current pricing information. You can get discounts for bulk orders.</p>
+    </div>
+    <div class="pricing-grid" id="pricingGrid"></div>
+  </div>
+</section>
+<section class="section tint" id="commission" data-nav="commission">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Commission</h2>
+      <p class="lead">This is where you can learn more about our commission process.</p>
+    </div>
+    <div class="comm-grid">
+      <div>
+        <h3>Available GFX</h3>
+        <ul class="tags" id="typeTags"></ul>
+        <h3>Basic commission information</h3>
+        <p>Here you can find the basic details about our commission process.</p>
+      </div>
+      <div>
+        <h3>Before you contact us</h3>
+        <ul class="checklist" id="prepList"></ul>
+      </div>
+    </div>
+
+    <div class="showcase" id="commissionShowcase">
+      <div class="cat-head">
+        <div>
+          <h2 class="process-title">Our Successful Commissions</h2>
+          <p>A look at some of the commissions we have completed for our clients.</p>
+        </div>
+        <div class="cat-tools">
+          <button class="see-all" type="button" data-see="commission">See all <small id="commCount"></small></button>
+          <button class="arrow" type="button" data-dir="-1" aria-label="Previous commissions"></button>
+          <button class="arrow" type="button" data-dir="1" aria-label="Next commissions"></button>
+        </div>
+      </div>
+      <div class="track" id="commTrack" tabindex="0" role="group" aria-label="Successful commissions carousel"></div>
+    </div>
+
+    <h2 class="process-title">How it works</h2>
+    <ol class="steps" id="steps"></ol>
+
+    <div class="comm-cta">
+      <a class="btn btn-primary" href="#contact">Message Us
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <small>This site is for information only. Orders and payments are arranged directly with the designer.</small>
+    </div>
+  </div>
+</section>
+<section class="section" id="contact" data-nav="contact">
+  <div class="wrap">
+    <div class="contact-panel">
+      <div>
+        <h2>Contact Us</h2>
+        <p>This is where you can get in touch with us about potential projects or collaborations.</p>
+        <div class="contact-actions">
+          <a class="btn btn-primary" id="emailBtn" href="#">Message Us</a>
+          <a class="btn btn-outline-light" href="#commission">Commission Info</a>
+        </div>
+      </div>
+      <div class="socials" id="socials"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<dialog id="gallery" aria-label="Gallery">
+  <div class="g-head">
+    <h3 id="gTitle"></h3>
+    <button class="g-back" id="gBack" hidden>Back to all</button>
+    <button class="g-close" id="gClose" aria-label="Close gallery">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="g-body">
+    <div class="g-grid" id="gGrid"></div>
+    <div class="g-single" id="gSingle" hidden>
+      <button class="g-nav g-prev" id="gPrev" aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <img id="gImg" alt="">
+      <button class="g-nav g-next" id="gNext" aria-label="Next image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+      <span class="g-count" id="gCount"></span>
+    </div>
+  </div>
+</dialog>
+
+
+
+
+<script src="js/content.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
