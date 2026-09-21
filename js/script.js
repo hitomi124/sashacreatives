@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#copyDiscord").addEventListener("click", async e => {
     const hint = $(".hint", e.currentTarget);
     try { await navigator.clipboard.writeText(DATA.discord); }
-    catch { const t = document.createElement("textarea"); t.value = DATA.discord; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch {} t.remove(); }
+    catch (err) { const t = document.createElement("textarea"); t.value = DATA.discord; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (err2) {} t.remove(); }
     hint.textContent = "Copied!";
     setTimeout(() => hint.textContent = "Copy", 1800);
   });
@@ -51,7 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </article>`).join("");
 
-  const commItems = (DATA.commissions || []).flatMap(c => c.images.map(im => ({ ...im, name: c.name })));
+  const commItems = [];
+  (DATA.commissions || []).forEach(c => c.images.forEach(im => commItems.push(Object.assign({}, im, { name: c.name }))));
   const COMM = { id: "commission", title: "Our Successful Commissions", images: commItems.map(x => x.src), items: commItems };
   const commBox = $("#commissionShowcase");
   if (commItems.length) {
@@ -61,6 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
     $('[data-dir="1"]', commBox).innerHTML = CHEV_R;
     $("#commTrack").innerHTML = commItems.map((im, i) => `<button class="slide" type="button" data-cat="commission" data-i="${i}" style="--r:${ratio(im)}" aria-label="${esc(im.name)} - ${esc(im.label)}"><img src="${esc(im.src)}" alt="${esc(im.name)} - ${esc(im.label)}" width="${im.w || 400}" height="${im.h || 400}" loading="lazy" decoding="async"><span class="c-name">${esc(im.name)}</span></button>`).join("");
   } else if (commBox) commBox.hidden = true;
+
+  const scrollTrack = (track, dx) => {
+    try { track.scrollBy({ left: dx, behavior: "smooth" }); }
+    catch (err) { track.scrollLeft += dx; }
+  };
 
   $$(".cat, .showcase").forEach(cat => {
     const track = $(".track", cat), prev = $('[data-dir="-1"]', cat), next = $('[data-dir="1"]', cat);
@@ -72,20 +78,32 @@ document.addEventListener("DOMContentLoaded", () => {
       if (max <= 2) { prev.hidden = next.hidden = true; } else { prev.hidden = next.hidden = false; }
     };
     const step = () => cat.classList.contains("showcase") ? Math.round(track.clientWidth * 0.85) : ($(".slide", track).offsetWidth + 16);
-    prev.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
-    next.addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
+    prev.addEventListener("click", () => scrollTrack(track, -step()));
+    next.addEventListener("click", () => scrollTrack(track, step()));
     track.addEventListener("scroll", sync, { passive: true });
     track.addEventListener("keydown", e => {
-      if (e.key === "ArrowRight") { e.preventDefault(); track.scrollBy({ left: step(), behavior: "smooth" }); }
-      if (e.key === "ArrowLeft") { e.preventDefault(); track.scrollBy({ left: -step(), behavior: "smooth" }); }
+      if (e.key === "ArrowRight") { e.preventDefault(); scrollTrack(track, step()); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); scrollTrack(track, -step()); }
     });
     addEventListener("resize", sync);
     sync();
   });
 
-  const gal = $("#gallery"), gGrid = $("#gGrid"), gSingle = $("#gSingle"), gImg = $("#gImg");
-  let cur = { cat: null, i: 0 };
+  const gal = $("#gallery"), gBody = $(".g-body", gal), gGrid = $("#gGrid"), gSingle = $("#gSingle"), gImg = $("#gImg");
+  let cur = { cat: null, i: 0 }, lastFocus = null, io = null;
   const catById = id => id === "commission" ? COMM : cats.find(c => c.id === id);
+  const fitGallery = () => gal.style.setProperty("--gh", window.innerHeight + "px");
+
+  function loadThumbs() {
+    if (io) { io.disconnect(); io = null; }
+    const imgs = $$("img[data-src]", gGrid);
+    const load = im => { im.src = im.getAttribute("data-src"); im.removeAttribute("data-src"); };
+    if (!("IntersectionObserver" in window)) { imgs.forEach(load); return; }
+    io = new IntersectionObserver(entries => entries.forEach(en => {
+      if (en.isIntersecting) { load(en.target); io.unobserve(en.target); }
+    }), { root: gBody, rootMargin: "600px 0px" });
+    imgs.forEach(im => io.observe(im));
+  }
 
   function showGrid() {
     const c = catById(cur.cat);
@@ -95,26 +113,44 @@ document.addEventListener("DOMContentLoaded", () => {
       const head = it && (i === 0 || c.items[i - 1].name !== it.name)
         ? `<h4 class="g-group">${esc(it.name)} <small>${c.items.filter(x => x.name === it.name).length}</small></h4>` : "";
       const alt = it ? `${it.name} - ${it.label}` : `${c.title} sample ${i + 1}`;
-      return head + `<button class="g-thumb${it ? " fit" : ""}" data-i="${i}"><img src="${esc(k)}" alt="${esc(alt)}" loading="lazy" decoding="async"></button>`;
+      return head + `<button type="button" class="g-thumb${it ? " fit" : ""}" data-i="${i}"><img data-src="${esc(k)}" alt="${esc(alt)}" decoding="async"></button>`;
     }).join("");
     gGrid.hidden = false; gSingle.hidden = true; $("#gBack").hidden = true;
-    $(".g-body", gal).scrollTop = 0;
+    gBody.scrollTop = 0;
+    loadThumbs();
   }
   function showSingle(i) {
     const c = catById(cur.cat), n = c.images.length;
+    if (io) { io.disconnect(); io = null; }
     cur.i = (i + n) % n;
     const it = c.items && c.items[cur.i];
-    gImg.src = c.images[cur.i]; gImg.alt = it ? `${it.name} - ${it.label}` : `${c.title} sample ${cur.i + 1}`;
+    gImg.alt = it ? `${it.name} - ${it.label}` : `${c.title} sample ${cur.i + 1}`;
+    gImg.src = c.images[cur.i];
     $("#gCount").textContent = `${cur.i + 1} / ${n}`;
     $("#gTitle").innerHTML = it ? `${esc(it.name)} <small>${esc(it.label)}</small>` : esc(c.title);
     gGrid.hidden = true; gSingle.hidden = false; $("#gBack").hidden = false;
-    $(".g-body", gal).scrollTop = 0;
+    gBody.scrollTop = 0;
   }
-  function openGallery(id, view, i = 0) {
-    cur = { cat: id, i };
-    view === "single" ? showSingle(i) : showGrid();
-    if (!gal.open) gal.showModal();
+  function openGallery(id, view, i) {
+    cur = { cat: id, i: i || 0 };
+    fitGallery();
+    if (gal.hidden) {
+      lastFocus = document.activeElement;
+      gal.hidden = false;
+      document.documentElement.classList.add("g-lock");
+    }
+    if (view === "single") showSingle(cur.i); else showGrid();
+    $("#gClose").focus();
   }
+  function closeGallery() {
+    if (gal.hidden) return;
+    gal.hidden = true;
+    document.documentElement.classList.remove("g-lock");
+    if (io) { io.disconnect(); io = null; }
+    gImg.removeAttribute("src");
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
   [$("#cats"), commBox].forEach(box => box && box.addEventListener("click", e => {
     const see = e.target.closest("[data-see]"), slide = e.target.closest(".slide");
     if (see) openGallery(see.dataset.see, "grid");
@@ -124,12 +160,24 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#gBack").addEventListener("click", showGrid);
   $("#gPrev").addEventListener("click", () => showSingle(cur.i - 1));
   $("#gNext").addEventListener("click", () => showSingle(cur.i + 1));
-  $("#gClose").addEventListener("click", () => gal.close());
-  gal.addEventListener("click", e => { if (e.target === gal) gal.close(); });
-  gal.addEventListener("keydown", e => {
-    if (gSingle.hidden) return;
-    if (e.key === "ArrowLeft") showSingle(cur.i - 1);
-    if (e.key === "ArrowRight") showSingle(cur.i + 1);
+  $("#gClose").addEventListener("click", closeGallery);
+  gal.addEventListener("click", e => { if (e.target === gal) closeGallery(); });
+  addEventListener("resize", () => { if (!gal.hidden) fitGallery(); });
+  addEventListener("orientationchange", () => { if (!gal.hidden) fitGallery(); });
+  document.addEventListener("keydown", e => {
+    if (gal.hidden) return;
+    if (e.key === "Escape") { closeGallery(); return; }
+    if (!gSingle.hidden) {
+      if (e.key === "ArrowLeft") showSingle(cur.i - 1);
+      if (e.key === "ArrowRight") showSingle(cur.i + 1);
+    }
+    if (e.key === "Tab") {
+      const f = $$("button, a[href]", gal).filter(el => !el.hidden && el.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
   });
   let sx = null;
   gSingle.addEventListener("touchstart", e => { sx = e.changedTouches[0].clientX; }, { passive: true });
@@ -157,7 +205,8 @@ document.addEventListener("DOMContentLoaded", () => {
   menuBtn.addEventListener("click", () => setMenu(!links.classList.contains("open")));
   links.addEventListener("click", e => { if (e.target.closest("a")) setMenu(false); });
   document.addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
-  matchMedia("(min-width:861px)").addEventListener("change", () => setMenu(false));
+  const wideMq = matchMedia("(min-width:861px)"), onWide = () => setMenu(false);
+  if (wideMq.addEventListener) wideMq.addEventListener("change", onWide); else if (wideMq.addListener) wideMq.addListener(onWide);
 
   const sections = $$("[data-nav]"), navLinks = $$(".nav-links a"), nav = $("#nav");
   let ticking = false;
