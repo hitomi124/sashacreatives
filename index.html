@@ -164,24 +164,26 @@
 </section>
 
 </main>
-<dialog id="gallery" aria-label="Gallery">
-  <div class="g-head">
-    <h3 id="gTitle"></h3>
-    <button class="g-back" id="gBack" hidden>Back to all</button>
-    <button class="g-close" id="gClose" aria-label="Close gallery">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-  </div>
-  <div class="g-body">
-    <div class="g-grid" id="gGrid"></div>
-    <div class="g-single" id="gSingle" hidden>
-      <button class="g-nav g-prev" id="gPrev" aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <img id="gImg" alt="">
-      <button class="g-nav g-next" id="gNext" aria-label="Next image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
-      <span class="g-count" id="gCount"></span>
+<div class="gallery" id="gallery" role="dialog" aria-modal="true" aria-label="Gallery" hidden>
+  <div class="g-panel">
+    <div class="g-head">
+      <h3 id="gTitle"></h3>
+      <button class="g-back" id="gBack" type="button" hidden>Back to all</button>
+      <button class="g-close" id="gClose" type="button" aria-label="Close gallery">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="g-body">
+      <div class="g-grid" id="gGrid"></div>
+      <div class="g-single" id="gSingle" hidden>
+        <button class="g-nav g-prev" id="gPrev" type="button" aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <img id="gImg" alt="">
+        <button class="g-nav g-next" id="gNext" type="button" aria-label="Next image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+        <span class="g-count" id="gCount"></span>
+      </div>
     </div>
   </div>
-</dialog>
+</div>
 
 
 
